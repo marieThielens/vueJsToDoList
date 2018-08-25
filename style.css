@@ -1,0 +1,16 @@
+li {
+    list-style-type:none; /* Pas de point */
+    cursor:pointer; /* souris devient une main*/
+    margin-bottom:10px;
+
+}
+.completed {
+    text-decoration: line-through;
+    color:green;
+}
+.fa-edit{
+    margin-right:15px;
+}
+.fa-trash-o{
+    margin-left:15px;
+}

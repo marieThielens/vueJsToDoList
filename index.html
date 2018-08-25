@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang=fr>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   
+   <!-- lien vue.js -->
+   <script src="https://unpkg.com/vue@2.3.2/dist/vue.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <title>Vue.js</title>
+</head>
+<body>
+    
+<div id="app">
+    <h2>{{title}}</h2>
+    <form v-on:submit.prevent="addTask()"> <!-- evenement au submit, addTasks est une fonction dans mon script -->
+        <input type="text" placeholder="tache à effectuer" v-model="task">
+        <button type="submit">ajouter</button> <!-- Comme c'est un formualire mon bouton est de type submit -->
+    </form>
+    <ul>
+        <!-- directive v-bing:attribut = " objet comme clé le nom de la classe: valeur= un boleen"
+        v-on:click on lui donne la valeur oposée (passe à true si false et inversémment )  -->
+        <li 
+        v-bind:class = "{ completed: task.done }"
+        v-on:click="task.done = !task.done" 
+        v-for="task in tasks">
+            <span v-if="!task.isInEditMode"><!-- Si l'objet ne suis pas en edit mode : affiche ce span-->
+                <!-- fontawesome au click: function à qui je passe la tache -->
+                <i class="fa fa-edit" v-on:click="switchMode(task)"></i>
+                {{task.description}}
+                <i class="fa fa-trash-o" v-on:click="deleteTask(task)"></i>
+            </span>
+            <span v-else>
+                <i class="fa da-thumbs-o-up"></i>
+                <input type="text" v-model="task.description" v-on:keyup.enter="switchMode(task)">
+            </span>
+        </li><!-- boucle dans le tableau tasks --> 
+    </ul>       
+</div>
+
+<script>
+var vm = new Vue({
+    el: '#app',
+    data: {
+    title: 'Une toDo list avec vue.js',
+    task: null, /* null = objet vide  */
+    tasks: []
+    },
+    methods:{ 
+        addTask: function(){ 
+            /* id: la date (unique), description : ma tache , done : au depart la tache n'est pas faite */
+            this.tasks.push({id: Date.now(), description: this.task, done: false, isInEditMode: false}); 
+            this.task = null /* Objet vide */
+        },
+        switchMode: function(task){
+            task.isInEditMode = !task.isInEditMode // prend la valeur oposee a ce qu elle avait
+            // console.log(task)
+        },
+        deleteTask: function(task){
+            this.tasks = this.tasks.filter(function(t) {
+                return t.id !== task.id; // on garde les taches qui ne sont pas l'id qu'on veut supprimer
+            })
+            console.log(task)
+        }
+    }
+})
+</script>
+    
+</body>
+</html>
